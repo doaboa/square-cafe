@@ -9,7 +9,6 @@ $(document).ready(function () {
 
  $('form').
   on('change', 'select', function(){
-    alert("pick another drink");
     
     $('form div:first').append("<select>" + selected + "</select><br />");
     item_count++;
@@ -22,17 +21,48 @@ $(document).ready(function () {
 
 
  	$(".button").click(function(event) {
+
  		event.preventDefault();
- 		$.post('/shop', total_cost, function(responsetext) {
+
+
+ 		$.ajax({
+
+ 			url:'/shop',
+ 			data: total_cost,
+ 			type: "POST",
+
+ 			success: function(){
  				$('#order_form').html("<div id='message'></div>");
- 				$('#message').html("<h2>" + responsetext + "!</h2>")
+ 				$('#message').html("<h2>Thank you for your order!</h2>")
  					.append("<p>Give us 10 minutes.</p>")
+ 					.hide()
  					.fadeIn(1500, function() {
  						$('#message').append("We'll take your payment of $" + (total_cost/100).toFixed(2) + " when we deliver your drink.");
  					});
-  		});
- 	});
+ 			},
+ 			
+ 			error: function() {
+ 				alert("Sorry, our server is down.  Please try again!")
+ 			}
+
+ 		});
+
+
+ 		// $.post('/shop', total_cost, function(responsetext) {
+
+ 		// 		$('#order_form').html("<div id='message'></div>");
+ 		// 		$('#message').html("<h2>" + responsetext + "!</h2>")
+ 		// 			.append("<p>Give us 10 minutes.</p>")
+ 		// 			.hide()
+ 		// 			.fadeIn(1500, function() {
+ 		// 				$('#message').append("We'll take your payment of $" + (total_cost/100).toFixed(2) + " when we deliver your drink.");
+ 		// 			});
+  	// 	});
+
+ 	
+ 	}); //closing $(".button").click.....etc
 
 
 
 });
+
